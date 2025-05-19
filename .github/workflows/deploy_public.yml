@@ -36,5 +36,6 @@ jobs:
       
       - name: Deploy to VM
         run: |
-          # rsync -avz --delete --exclude '.git*' --rsh="/usr/bin/sshpass ssh -o StrictHostKeyChecking=no -l root" public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo rm -rf ${{ secrets.SSH_PATH }}/*"
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker restart nginx"
