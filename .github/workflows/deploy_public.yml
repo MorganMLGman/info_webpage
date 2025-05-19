@@ -1,0 +1,37 @@
+name: Deploy Hugo Site to VM
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH keys
+        run: |
+          mkdir -p ~/.ssh && touch ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
+
+      - name: Install Hugo
+        run: |
+          sudo apt update
+          sudo apt install -y hugo
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Hugo site
+        run: |
+          hugo --gc --minify --cleanDestinationDir 
+      
+      - name: Deploy to VM
+        run: |
+          rsync -avz --delete --exclude '.git*' public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker restart nginx"
