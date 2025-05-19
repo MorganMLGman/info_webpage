@@ -21,8 +21,7 @@ jobs:
 
       - name: Install Hugo
         run: |
-          sudo apt update
-          sudo apt install -y hugo
+          sudo apt update && sudo apt install -y hugo
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,5 +32,5 @@ jobs:
       
       - name: Deploy to VM
         run: |
-          rsync -avz --delete --exclude '.git*' public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+          rsync -avz --delete --exclude '.git*' --rsh="/usr/bin/sshpass ssh -o StrictHostKeyChecking=no -l root" public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker restart nginx"
