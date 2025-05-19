@@ -1,0 +1,20 @@
+name: Hugo Release
+
+on:
+  push: 
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Hugo
+        uses: lowply/build-hugo@v0.147.2
