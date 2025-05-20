@@ -286,3 +286,5 @@ Then in the `cloudflare_zero_trust_tunnel_cloudflared_config` resource you need 
 ## 5. Conclusion
 
 Now you know how I created this website. I used Hugo to create a static website, Oracle Cloud to host the website, and Cloudflare to manage the domain and DNS records. I used OpenTofu to automate the process of creating the VM and deploying the website. Furthermore, I also used GitHub Actions to automate the deployment process. There are many other ways to create a static website, but this is the way I chose. Also, there are many places where I could improve the process, but I am happy with the current state. Thank you for reading this article, I hope you found it useful. If you have any questions or suggestions, feel free to contact me.
+
+You can find the complete code for this website on my [GitHub](https://github.com/MorganMLGman/info_webpage) page.
