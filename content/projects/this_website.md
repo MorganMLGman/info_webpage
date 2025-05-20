@@ -17,22 +17,22 @@ toc:
 ---
 ## 1. Static Webpage
 
-Let me explain how I created this website. Firstly, this website is a static webpage, but what static means? 
+Let me explain how I created this website. Firstly, this website is a static webpage, but what does static mean? 
 
 A [static webpage](https://en.wikipedia.org/wiki/Static_web_page) is a website that is not generated dynamically, but rather is pre-generated and served as-is to the user. This means that the content of the website does not change based on user input or other factors, and it is typically faster and more secure than dynamic websites. 
 
-Ok so now you know what a static webpage is, but are there any benefits to using a static webpage? Yes, there are many benefits to using a static webpage, including:
-- **Speed**: Static webpages are typically faster to load than dynamic webpages, as they do not require server-side processing or database queries.
-- **Cost**: Static webpages are often cheaper to host than dynamic webpages, as they do not require a server with a database or server-side scripting capabilities.
-- **Simplicity**: Static webpages are easier to create and maintain than dynamic webpages, as they do not require complex server-side programming or database management.
+Ok so now you know what a static webpage is, but are there any benefits of using a static webpage? Yes, there are many benefits of using a static site, including:
+- **Speed**: Static websites are typically faster to load than dynamic webpages, as they do not require server-side processing or database queries.
+- **Cost**: Static websites are often cheaper to host than dynamic webpages, as they do not require a server with a database or server-side scripting capabilities.
+- **Simplicity**: Static websites are easier to create and maintain than dynamic webpages, as they do not require complex server-side programming or database management.
 
 ## 2. Hugo
 
-But how do you create a static webpage? There are many ways to create a static webpage, but I will explain how I created this website using [Hugo](https://gohugo.io/) and [Hugo Profile](https://github.com/gurusabarish/hugo-profile).
+But how do you create a static webpage? There are many ways to create a static site, but I will explain how I created this website using [Hugo](https://gohugo.io/) and [Hugo Profile](https://github.com/gurusabarish/hugo-profile).
 
-Hugo is a framework for building static websites quickly and easily. It is written in Go and is known for its speed and flexibility. 
+Hugo is a framework for building static sites quickly and easily. It is written in Go and is known for its speed and flexibility.
 
-Firstly, you need to install Hugo. You can do this by following the instructions on the [Hugo installation page](https://gohugo.io/getting-started/installing/). I am using Fedora, so I installed Hugo with this command: 
+Firstly, you need to install Hugo. You can do this by following the instructions on the [Hugo installation page](https://gohugo.io/getting-started/installing/). I am using Fedora, so I installed Hugo with this command:
 ```bash
 sudo dnf install hugo
 ```
@@ -57,7 +57,7 @@ After that to speed things up I copied the `config.yaml` file from the theme to 
 
 There are few things that you need to change in the `config.yaml` file. Firstly, you need to change the `baseURL` to the URL of your website. You can also change the `title`, `description`, and other settings to customize your site.
 
-I don't want to go into too much detail about the configuration file, because I don't want to create tutorial about "How to create Hugo webpage". Instead, I want to explain how I created this exact website from more technical and hosting point of view.
+I don't want to go into too much details about the configuration file, because I don't want to create a tutorial about "How to create Hugo webpage". Instead, I want to explain how I created this exact website from more technical and hosting point of view.
 
 ## 4. Hosting
 
@@ -69,7 +69,7 @@ I didn't want to use GitHub Pages, because I wanted to host my website under my 
 
 Oracle Cloud is a cloud computing service that offers a wide range of services, including virtual machines, storage, and networking. It is free to use for the first 30 days, and it offers a free tier with limited resources.
 
-You can create VM on Oracle Cloud manually, using the web interface, it isn't that hard. But I wanted to automate the process, so I used [OpenTofu](https://www.opentofu.org/) to create the VM. OpenTofu is a fork of Terraform, and it allows you to create and manage cloud resources using code.
+You can create VM on Oracle Cloud manually, using the web interface, but I wanted to automate the process, so I used [OpenTofu](https://www.opentofu.org/) to create the VM. OpenTofu is a fork of Terraform, and it allows you to create and manage cloud resources using code.
 
 ![Creating VM with Oracle Web Interface](/images/projects/this_website/oracle_vm_creation.png)
 
@@ -102,17 +102,17 @@ module "instance" {
 
 
 This is part of the configuration file that I use to create the VM, let's go through it step by step:
- - `source`: Where to find the module. In this case, it is the Oracle module for creating a VM.
- - `ad_number`: This is the availability domain number, in this case it is 1. You can find the availability domain number in the Oracle Cloud console.
- - `compartment_id`: Compartment is a logical container for your resources. You can create compartments in the Oracle Cloud console and also find its ID there.
- - `instance_display_name`: VM name, no need to explain.
- - `source_ocid`: This is the ID of the image that you want to use for the VM. Let's say it is like an ISO image for the VM. You can find the image ID in the Oracle Cloud console.
- - `subnet_ocids`: Here you need to specify the subnet ID. Multiple subnets can be specified, but in my case I only have one subnet. You can find the subnet ID in the Oracle Cloud console.
+ - `source`: Where to find the module. In this case, it is the [Oracle module](https://github.com/oracle-terraform-modules/terraform-oci-compute-instance) for creating a VM.
+ - `ad_number`: This is the availability domain number, in this case it is 1. You can find the availability domain number in the [Oracle Cloud console](https://cloud.oracle.com/).
+ - `compartment_id`: Compartment is a logical container for your resources. You can create compartments in the [Oracle Cloud console](https://cloud.oracle.com/) and also find its ID there.
+ - `instance_display_name`: VM name visible in the [Oracle](https://cloud.oracle.com/). I set it to `local.oracle.vm.name`, which is defined in the `locals` block. You can set it to any name you want.
+ - `source_ocid`: This is the ID of the image that you want to use for the VM. Let's say it is like an ISO image for the VM. You can find the image ID in the [Oracle Cloud console](https://cloud.oracle.com/).
+ - `subnet_ocids`: Here you need to specify the subnet ID. Multiple subnets can be specified, but in my case I only have one subnet. You can find the subnet ID in the [Oracle Cloud console](https://cloud.oracle.com/).
  - `public_ip`: Here you can specify if you want to create a public IP address for the VM. I set it to `NONE`, because I will assign the public IP later.
  - `ssh_public_keys`: This is the public SSH key that you want to use to connect to the VM. Without this key you won't be able to connect to the VM.
  - `block_storage_size_in_gbs`: This is the size of the "disk" that you want to use for the VM. You can attach multiple disks to the VM.
  - `boot_volume_size_in_gbs`: If the previous option is the size of the "disk", this is the size of the "boot partition".
- - `shape`: Shape of the VM is specific name for  "this many cores and this much RAM". You can find the shape name in the Oracle Cloud console.
+ - `shape`: It is a specific name for  "this many cores and this much RAM". You can find the shape name in the [Oracle Cloud console](https://cloud.oracle.com/).
  - `instance_state`: Here you can specify if you want to create the VM in a stopped state or running state. I set it to `RUNNING`, because I want to use the VM right after it is created.
  - `boot_volume_backup_policy`: Here you can specify if you want to create a backup policy for the boot volume. I set it to `disabled`, because I don't need it.
  - `user_data`: This point will be explained later, but this is the script that will be executed when the VM is created. You can use it to install software, configure the VM, etc.
@@ -179,7 +179,7 @@ Init script is executed by the `init.service` I created. This service executed t
 
 ### 4.2. GitHub Actions
 
-After creating the VM, I needed to deploy the website. But how to do this? You could run `hugo` command on your local machine and then copy necessary files to the VM with `scp` or similar, but this is not very convenient. Instead, I used [GitHub Actions](https://docs.github.com/en/actions) to automate the deployment process. I created a workflow that is triggered every time I push changes to the repository. This workflow builds the website and deploys it to the VM using SSH. 
+After creating the VM, I needed to deploy the website. But how you can do this? You could run `hugo` command on your local machine and then copy necessary files to the VM with `scp` or similar, but this is not very convenient. Instead, I used [GitHub Actions](https://docs.github.com/en/actions) to automate the deployment process. I created a workflow that is triggered every time I push changes to the repository. This workflow builds the website and deploys it to the VM using SSH. 
 
 First step in the workflow is to set up SSH keys, that are used to connect to the VM. I created SSH key pair using `ssh-keygen` command and added the public key to the `~/.ssh/authorized_keys` file on the VM. The private key is stored in the GitHub repository secrets, so it is not exposed to the public. 
 
@@ -228,11 +228,11 @@ jobs:
 
 I use Cloudflare to manage my domain and DNS records. I don't have public IP so most services I host using [Cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/). This allows me to access my services using a domain name, without having public IP and port forwarding. You can assign public IP to the VM and host it that way, but I choose not too just to stick to the same methodology I used for other services.
 
-I created the tunnel manually using the Cloudflare web interface, I didn't find straight answer if this can be done using OpenTofu. Probably yes but it is not obvious. 
+I created the tunnel manually using the Cloudflare web interface, I didn't find straight answer if this can be done using OpenTofu. Probably yes, but it is not obvious. 
 
 ![Cloudflare tunnel creation](/images/projects/this_website/cloudflare_tunnel.png)
 
-After creating the tunnel, you need to run `cloudflared` service on the VM. This service is responsible for establishing the connection between the VM and Cloudflare. You can find prepared commands for various systems at the tunnel creation page. I used Docker to run the service, so I added appropriate entry to the `docker-compose.yml` file. 
+After creating the tunnel, you need to run `cloudflared` service on the VM. This service is responsible for establishing the connection between the VM and Cloudflare. You can find prepared commands for various systems at the [tunnel creation page](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/). I used Docker to run the service, so I added appropriate entry to the `docker-compose.yml` file.
 
 ```yaml
   cloudflared:
@@ -279,7 +279,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "oracle_tofu_config" 
 }
 ```
 
-In `cf_subdomain` variable you need to specify the subdomain that you want to use for the tunnel. In my case it is `info`. For `service` variable you need to specify the service that you want to expose using the tunnel. Here it is `http://nginx:80`, because I am using Nginx to serve the website.
+In `cf_subdomain` variable you need to specify the subdomain that you want to use for the tunnel. In my case it is `info`. For `service` variable you need to specify the service that you want to expose using the tunnel. Here I used `http://nginx:80`, because I am using Nginx to serve the website.
 
 Then in the `cloudflare_zero_trust_tunnel_cloudflared_config` resource you need to specify the ingress rules for the tunnel. First rule is used to route traffic to the service, the second rule returns 404 error for all other requests.
 
