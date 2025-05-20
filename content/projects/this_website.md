@@ -66,7 +66,7 @@ I didn't want to use GitHub Pages, because I wanted to host my website under my 
 
 Oracle Cloud is a cloud computing service that offers a wide range of services, including virtual machines, storage, and networking. It is free to use for the first 30 days, and it offers a free tier with limited resources.
 
-You can create VM on Oracle Cloud manually, using the web interface, it isn't that hard. But I wanted to automate the process, so I used [OpenTofu](https://www.opentofu.org/) to create the VM. OpenTofu is an open-source alternative to Terraform, and it allows you to create and manage cloud resources using code.
+You can create VM on Oracle Cloud manually, using the web interface, it isn't that hard. But I wanted to automate the process, so I used [OpenTofu](https://www.opentofu.org/) to create the VM. OpenTofu is a fork of Terraform, and it allows you to create and manage cloud resources using code.
 
 ![Creating VM with Oracle Web Interface](/images/projects/this_website/oracle_vm_creation.png)
 
@@ -91,10 +91,10 @@ This is part of the configuration file that I use to create the VM, let's go thr
  - `ssh_public_keys`: This is the public SSH key that you want to use to connect to the VM. Without this key you won't be able to connect to the VM.
  - `block_storage_size_in_gbs`: This is the size of the "disk" that you want to use for the VM. You can attach multiple disks to the VM.
  - `boot_volume_size_in_gbs`: If the previous option is the size of the "disk", this is the size of the "boot partition".
-- `shape`: Shape of the VM is specific name for "this many cores and this much RAM". You can find the shape name in the Oracle Cloud console.
-- `instance_state`: Here you can specify if you want to create the VM in a stopped state or running state. I set it to `RUNNING`, because I want to use the VM right after it is created.
-- `boot_volume_backup_policy`: Here you can specify if you want to create a backup policy for the boot volume. I set it to `disabled`, because I don't need it.
-- `user_data`: This point will be explained later, but this is the script that will be executed when the VM is created. You can use it to install software, configure the VM, etc.
+ - `shape`: Shape of the VM is specific name for "this many cores and this much RAM". You can find the shape name in the Oracle Cloud console.
+ - `instance_state`: Here you can specify if you want to create the VM in a stopped state or running state. I set it to `RUNNING`, because I want to use the VM right after it is created.
+ - `boot_volume_backup_policy`: Here you can specify if you want to create a backup policy for the boot volume. I set it to `disabled`, because I don't need it.
+ - `user_data`: This point will be explained later, but this is the script that will be executed when the VM is created. You can use it to install software, configure the VM, etc.
 
 #### User data
 
