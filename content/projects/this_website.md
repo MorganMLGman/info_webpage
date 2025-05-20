@@ -15,9 +15,9 @@ tags:
 image: /images/projects/this_website/website.png
 toc:
 ---
-## Static Webpage
+## 1. Static Webpage
 
-Let me explain how I created this website. Firstly, this website is a static webpage, but what is a static webpage? 
+Let me explain how I created this website. Firstly, this website is a static webpage, but what static means? 
 
 A [static webpage](https://en.wikipedia.org/wiki/Static_web_page) is a website that is not generated dynamically, but rather is pre-generated and served as-is to the user. This means that the content of the website does not change based on user input or other factors, and it is typically faster and more secure than dynamic websites. 
 
@@ -26,7 +26,7 @@ Ok so now you know what a static webpage is, but are there any benefits to using
 - **Cost**: Static webpages are often cheaper to host than dynamic webpages, as they do not require a server with a database or server-side scripting capabilities.
 - **Simplicity**: Static webpages are easier to create and maintain than dynamic webpages, as they do not require complex server-side programming or database management.
 
-## Hugo
+## 2. Hugo
 
 But how do you create a static webpage? There are many ways to create a static webpage, but I will explain how I created this website using [Hugo](https://gohugo.io/) and [Hugo Profile](https://github.com/gurusabarish/hugo-profile).
 
@@ -46,7 +46,7 @@ hugo new site <site-name>
 
 This will create a new directory with the name you specified, and it will contain the basic structure of a Hugo site. I additionally used the `--format=yaml` option to create the configuration file in YAML format. You can also use TOML or JSON, but I prefer YAML because I am more familiar with it.
 
-## Hugo Profile
+## 3. Hugo Profile
 
 After creating the site, you need to add a theme. I used [Hugo Profile](https://github.com/gurusabarish/hugo-profile). To add the theme, you need to clone the theme repository into the `themes` directory of your Hugo site. You can do this with the following command:
 ```bash
@@ -59,13 +59,13 @@ There are few things that you need to change in the `config.yaml` file. Firstly,
 
 I don't want to go into too much detail about the configuration file, because I don't want to create tutorial about "How to create Hugo webpage". Instead, I want to explain how I created this exact website from more technical and hosting point of view.
 
-## Hosting
+## 4. Hosting
 
 After creating the site, you need to host it. There are many ways to host a static website. The easiest way is to use a [GitHub Pages](https://pages.github.com/). You can create a new repository on GitHub, push your Hugo site to the repository, and then enable GitHub Pages in the repository settings. This allows you to serve your static website directly from GitHub.
 
 I didn't want to use GitHub Pages, because I wanted to host my website under my own domain. So I decided to use [Oracle Cloud](https://www.oracle.com/cloud/) with [Cloudflare](https://www.cloudflare.com/).
 
-### Oracle Cloud
+### 4.1. Oracle Cloud
 
 Oracle Cloud is a cloud computing service that offers a wide range of services, including virtual machines, storage, and networking. It is free to use for the first 30 days, and it offers a free tier with limited resources.
 
@@ -78,7 +78,7 @@ To use OpenTofu, you need to install it first. You can do this by following the 
 ```bash
 sudo dnf install opentofu
 ```
-After that, you need to create a configuration file for OpenTofu. This file contains the configuration for the VM, including the image, shape, and networking settings. You can find an example configuration file in the [Oracle Provider documentation](https://registry.terraform.io/providers/oracle/oci/latest/docs). Creating every resource manually is a bit tedious, but you can use [module](https://github.com/oracle-terraform-modules/terraform-oci-compute-instance) created by Oracle to create the VM. Module is, lets say, a template for creating resources.
+After that, you need to create a configuration file for OpenTofu. This file contains the configuration for the VM, including the image, shape, and networking settings. You can find an example configuration file in the [Oracle Provider documentation](https://registry.terraform.io/providers/oracle/oci/latest/docs). Creating every resource manually is a bit tedious, but you can use [module](https://github.com/oracle-terraform-modules/terraform-oci-compute-instance) created by Oracle to create the VM. Module is, let's say, a template for creating resources.
 
 ```hcl
 module "instance" {
@@ -117,7 +117,7 @@ This is part of the configuration file that I use to create the VM, let's go thr
  - `boot_volume_backup_policy`: Here you can specify if you want to create a backup policy for the boot volume. I set it to `disabled`, because I don't need it.
  - `user_data`: This point will be explained later, but this is the script that will be executed when the VM is created. You can use it to install software, configure the VM, etc.
 
-#### User data
+#### 4.1.1. User data
 
 The user data is a cloud-init file that is executed when the VM is created. In cloud-init file you can define if you want to update the system packages during the first boot, install additional packages, format, and mount additional disks, and create scripts that will be executed after the first boot. 
 
@@ -158,7 +158,7 @@ write_files:
 
 I am using [Telegram Bot API](https://core.telegram.org/bots/api) to send messages from the script. This allows me to receive notifications about the status of the VM and any errors that occur during the creation process. After performing `apt update && apt upgrade`, I installed Docker and Docker Compose using commands from the [official Docker documentation](https://docs.docker.com/engine/install/ubuntu/).
 
-Init script is executed by the `init.service` I created. This service ensures that the script is executed only once, when the VM is created, and not every time the VM is started.
+Init script is executed by the `init.service` I created. This service executed the script only once, when the VM is created, and not at every start of the VM.
 
 ```yaml
   - path: /etc/systemd/system/init.service
@@ -176,3 +176,113 @@ Init script is executed by the `init.service` I created. This service ensures th
       [Install]
       WantedBy=multi-user.target
 ```
+
+### 4.2. GitHub Actions
+
+After creating the VM, I needed to deploy the website. But how to do this? You could run `hugo` command on your local machine and then copy necessary files to the VM with `scp` or similar, but this is not very convenient. Instead, I used [GitHub Actions](https://docs.github.com/en/actions) to automate the deployment process. I created a workflow that is triggered every time I push changes to the repository. This workflow builds the website and deploys it to the VM using SSH. 
+
+First step in the workflow is to set up SSH keys, that are used to connect to the VM. I created SSH key pair using `ssh-keygen` command and added the public key to the `~/.ssh/authorized_keys` file on the VM. The private key is stored in the GitHub repository secrets, so it is not exposed to the public. 
+
+Second step is simple, you need to install Hugo on the GitHub Actions runner. There are many already created actions for this, that you can find on the [GitHub Marketplace](https://github.com/marketplace?type=actions&query=hugo). But most of them deploy the website to the GitHub Pages, so I created my own action that installs Hugo on the runner. 
+
+Next step is also simple, checkout code from the repository. In this step you can use [actions/checkout](https://github.com/marketplace/actions/checkout).
+
+Another step is to build the website. This step uses the `hugo --gc --minify --cleanDestinationDir` command to generate the static files for the website. Options `--gc` and `--minify` are used to remove unused files and minify the generated files. Option `--cleanDestinationDir` is used to remove all files from the destination directory before generating the new files. This ensures that only the files that are needed for the website are present in the destination directory.
+
+Last step is to deploy the website to the VM. This step uses `rsync` command to copy the files from the local machine to the VM. The `-avz` options are used to copy files recursively, preserve file permissions, and compress the files during transfer. Option `--delete` is used to delete files on the VM that are not present in the local directory. This ensures that only the files that are needed for the website are present on the VM. I use `--exclude` option to exclude the `.git` directory from the transfer, theoretically it is not needed, but I prefer to exclude it just in case. At the end I use `ssh` command to restart the Nginx service, so the changes are applied immediately. 
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH keys
+        run: |
+          mkdir -p ~/.ssh && touch ~/.ssh/id_rsa
+          cat <<EOF > ~/.ssh/id_rsa
+          ${{ secrets.SSH_PRIVATE_KEY }}
+          EOF
+
+          chmod 400 ~/.ssh/id_rsa
+
+      - name: Install Hugo
+        run: |
+          sudo apt update && sudo apt install -y hugo
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Hugo site
+        run: |
+          hugo --gc --minify --cleanDestinationDir 
+      
+      - name: Deploy to VM
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "uname -a"
+          rsync -avz --delete --exclude '.git*' public/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker restart nginx"
+```
+
+### 4.3. Cloudflare
+
+I use Cloudflare to manage my domain and DNS records. I don't have public IP so most services I host using [Cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/). This allows me to access my services using a domain name, without having public IP and port forwarding. You can assign public IP to the VM and host it that way, but I choose not too just to stick to the same methodology I used for other services.
+
+I created the tunnel manually using the Cloudflare web interface, I didn't find straight answer if this can be done using OpenTofu. Probably yes but it is not obvious. 
+
+![Cloudflare tunnel creation](/images/projects/this_website/cloudflare_tunnel.png)
+
+After creating the tunnel, you need to run `cloudflared` service on the VM. This service is responsible for establishing the connection between the VM and Cloudflare. You can find prepared commands for various systems at the tunnel creation page. I used Docker to run the service, so I added appropriate entry to the `docker-compose.yml` file. 
+
+```yaml
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+```
+
+You need to set the `CLOUDFLARE_TUNNEL_TOKEN` environment variable to the token that you received when you created the tunnel. This token is used to authenticate the connection between the VM and Cloudflare.
+
+Fortunately, rest of the steps needed to host the website are possible to do using OpenTofu. I used provider for Cloudflare to create the DNS records and also needed entries in tunnel configuration. You can find the provider [here](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs).
+
+I created my own [module](https://codeberg.org/MorganMLGman/Tofu_Modules/src/branch/master/cloudflare_tunnel_simple) for creating the DNS records. This module creates needed DNS records for my domain and as an output it returns the tunnel configuration for that record, that I just need to copy to the tunnel configuration resource. 
+
+```hcl
+module "cf_info_webpage" {
+  source = "git::ssh://git@codeberg.org/MorganMLGman/Tofu_Modules.git//cloudflare_tunnel_simple"
+
+  cf_domain = var.cf_domain
+  cf_account_id = sensitive(local.secrets.cf_account_id)
+  cf_tunnel_id = sensitive(local.secrets.oracle_cf_tunnel_id)
+  cf_zone_id = sensitive(local.secrets.cf_zone_id)
+  cf_subdomain = "info"
+  service = "http://nginx:80"  
+}
+
+resource "cloudflare_zero_trust_tunnel_cloudflared_config" "oracle_tofu_config" {
+  account_id = sensitive(local.secrets.cf_account_id)
+  tunnel_id  = sensitive(local.secrets.oracle_cf_tunnel_id)
+  config = {
+    ingress = [
+      {
+        hostname = module.cf_info_webpage.cf_tunnel_config_hostname
+        service  = module.cf_info_webpage.cf_tunnel_config_service
+      },
+      {
+        service = "http_status:404"
+      }
+    ]
+  }
+}
+```
+
+In `cf_subdomain` variable you need to specify the subdomain that you want to use for the tunnel. In my case it is `info`. For `service` variable you need to specify the service that you want to expose using the tunnel. Here it is `http://nginx:80`, because I am using Nginx to serve the website.
+
+Then in the `cloudflare_zero_trust_tunnel_cloudflared_config` resource you need to specify the ingress rules for the tunnel. First rule is used to route traffic to the service, the second rule returns 404 error for all other requests.
+
+## 5. Conclusion
+
+Now you know how I created this website. I used Hugo to create a static website, Oracle Cloud to host the website, and Cloudflare to manage the domain and DNS records. I used OpenTofu to automate the process of creating the VM and deploying the website. Furthermore, I also used GitHub Actions to automate the deployment process. There are many other ways to create a static website, but this is the way I chose. Also, there are many places where I could improve the process, but I am happy with the current state. Thank you for reading this article, I hope you found it useful. If you have any questions or suggestions, feel free to contact me.
