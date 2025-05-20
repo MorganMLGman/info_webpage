@@ -34,10 +34,12 @@
     display: inline-block;
     text-decoration: none;
     color: var(--text-link-color) !important;
+    font-weight: 700;
 }
 
 #single .page-content a::after {
     content: "";
+    font-weight: 700;
     display: block;
     width: 0px;
     height: 2px;
