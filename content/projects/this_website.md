@@ -44,7 +44,7 @@ hugo new site <site-name>
 ![Hugo new site command](/images/projects/this_website/hugo_new_site.png)
 
 
-This will create a new directory with the name you specified, and it will contain the basic structure of a Hugo site. I additionally used the `--format=yaml` option to create the configuration file in YAML format. You can also use TOML or JSON, but I prefer YAML because I am more familiar with it.
+This will create a new directory with the name you specified, and it will contain the basic structure of a Hugo site. Additionally, I used the `--format=yaml` option to create the configuration file in YAML format. You can also use TOML or JSON, but I prefer YAML because I am more familiar with it.
 
 ## 3. Hugo Profile
 
@@ -156,7 +156,7 @@ write_files:
       apt update -y && apt upgrade -y
 ```
 
-I am using [Telegram Bot API](https://core.telegram.org/bots/api) to send messages from the script. This allows me to receive notifications about the status of the VM and any errors that occur during the creation process. After performing `apt update && apt upgrade`, I installed Docker and Docker Compose using commands from the [official Docker documentation](https://docs.docker.com/engine/install/ubuntu/).
+I am using [Telegram Bot API](https://core.telegram.org/bots/api) to send messages from the script. This allows me to receive notifications about the status of the VM and errors that occur during the creation process. After performing `apt update && apt upgrade`, I installed Docker and Docker Compose using commands from the [official Docker documentation](https://docs.docker.com/engine/install/ubuntu/).
 
 Init script is executed by the `init.service` I created. This service executed the script only once, when the VM is created, and not at every start of the VM.
 
