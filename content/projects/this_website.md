@@ -53,9 +53,9 @@ After creating the site, you need to add a theme. I used [Hugo Profile](https://
 git clone https://github.com/gurusabarish/hugo-profile.git themes/hugo-profile
 ```
 
-After that to speed things up I copied the `config.yaml` file from the theme to the root of my site. This file contains the configuration for the Hugo and the theme itself, and it is used by Hugo to generate the site.
+After that to speed things up I copied the `hugo.yaml` file from the theme to the root of my site. This file contains the configuration for the Hugo and the theme itself, and it is used by Hugo to generate the site.
 
-There are few things that you need to change in the `config.yaml` file. Firstly, you need to change the `baseURL` to the URL of your website. You can also change the `title`, `description`, and other settings to customize your site.
+There are few things that you need to change in the `hugo.yaml` file. Firstly, you need to change the `baseURL` to the URL of your website. You can also change the `title`, `description`, and other settings to customize your site.
 
 I don't want to go into too much details about the configuration file, because I don't want to create a tutorial about "How to create Hugo webpage". Instead, I want to explain how I created this exact website from more technical and hosting point of view.
 

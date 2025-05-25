@@ -225,9 +225,18 @@ params:
     enable: true
     index: false
     items:
+      - title: "Python in Data Science"
+        date: "May 2025"
       - title: "Python - basics for data analysis"
         date: "May 2025"
-
+      - title: "Rust - basics"
+        date: "Feb 2025"
+      - title: "Python - Powered Software Testing and Automation"
+        date: "Jun 2024"
+      - title: "Python - Design Patterns"
+        date: "Aug 2023"
+      - title: "Kubernetes on Azure (AKS)"
+        date: "Mar 2022"
   # Achievements
   # achievements:
   #   enable: true
