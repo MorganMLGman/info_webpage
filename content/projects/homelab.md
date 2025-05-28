@@ -1,7 +1,7 @@
 ---
 title: "Homelab"
 date: 2025-05-25T21:19:00+02:00
-draft: false
+draft: true
 author: "MorganMLG"
 tags:
   - Cloudflare

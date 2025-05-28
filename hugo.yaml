@@ -117,13 +117,8 @@ params:
     # roundImage: true # Make hero image circular | default false
     buttons:
     - enable: true
-      name: "Resume PL"
-      url: "/cv/KacperChołody_CV.pdf"
-      download: true
-      newPage: false
-    - enable: true
-      name: "Resume ENG"
-      url: "/cv/KacperChołody_CV_ENG.pdf"
+      name: "Resume"
+      url: "/cv/Kacper_Chołody_CV.pdf"
       download: true
       newPage: false
     socialLinks:
